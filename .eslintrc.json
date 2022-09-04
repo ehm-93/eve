@@ -1,0 +1,99 @@
+{
+    "root": true,
+    "env": {
+        "browser": false,
+        "es6": true
+    },
+    "plugins": [
+        "prefer-arrow",
+        "import",
+        "@typescript-eslint"
+    ],
+    "overrides": [{
+        "files": [ "*.ts" ],
+        "parserOptions": {
+            "project": "tsconfig.json",
+            "createDefaultProgram": true
+        },
+        "extends": [
+            "plugin:@typescript-eslint/recommended"
+        ],
+        "rules": {
+            "semi": "error",
+            "no-underscore-dangle": "off",
+            "quotes": [ "error", "single" ],
+            "@typescript-eslint/no-namespace": "off",
+            "@typescript-eslint/no-shadow": "error",
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    "selector": "default",
+                    "format": [
+                        "camelCase",
+                        "snake_case",
+                        "PascalCase",
+                        "UPPER_CASE"
+                    ],
+                    "leadingUnderscore": "allow",
+                    "trailingUnderscore": "forbid"
+                },
+                {
+                    "selector": [ "variable" ],
+                    "modifiers": [ "const" ],
+                    "format": [ "camelCase", "UPPER_CASE" ]
+                },
+                {
+                    "selector": [ "variable" ],
+                    "format": [ "camelCase" ]
+                },
+                {
+                    "selector": [ "typeLike" ],
+                    "format": [ "PascalCase" ]
+                }
+            ],
+            "@typescript-eslint/member-ordering": "error",
+            "@typescript-eslint/prefer-readonly": "error",
+            "@typescript-eslint/no-unused-vars": "error",
+            // use @typescript-eslint/no-shadow instead
+            "no-shadow": "off",
+            "no-trailing-spaces": "error",
+            "quote-props": [ "error", "as-needed" ],
+            "space-before-function-paren": [
+                "error",
+                {
+                    "anonymous": "never",
+                    "asyncArrow": "always",
+                    "named": "never"
+                }
+            ],
+            "prefer-arrow/prefer-arrow-functions": [ "error", { "allowStandaloneDeclarations": true }],
+            "complexity": [ "error", 10 ],
+            "comma-dangle": [ "error", "always-multiline" ],
+            "import/order": [
+                "error",
+                {
+                    "newlines-between": "always",
+                    "groups": [
+                        "builtin",
+                        "external",
+                        "internal",
+                        "parent",
+                        "sibling",
+                        "index"
+                    ],
+                    "alphabetize": {
+                        "order": "asc",
+                        "caseInsensitive": false
+                    },
+                    "pathGroups": [{
+                        "pattern": "@emmettsdomain/**",
+                        "group": "internal",
+                        "position": "before"
+                    }],
+                    "pathGroupsExcludedImportTypes": [ "builtin" ]
+                }
+            ],
+            "indent": [ "error", 2 ]
+        }
+    }]
+}

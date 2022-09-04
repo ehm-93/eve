@@ -1,8 +1,6 @@
 {
   "files": [],
   "references": [{
-    "path": "packages/a"
-  }, {
-    "path": "packages/b"
+    "path": "packages/marketer-client"
   }]
 }
