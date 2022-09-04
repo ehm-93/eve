@@ -1,0 +1,15 @@
+{
+  "name": "@emmettsdomain/eve",
+  "packageManager": "yarn@3.2.3",
+  "scripts": {
+    "build": "yarn run tsc --build",
+    "clean": "yarn run tsc --build --clean"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.8.2"
+  }
+}
