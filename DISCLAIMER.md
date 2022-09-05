@@ -1,4 +1,0 @@
-These software packages are subject to the [EVE Online developer license agreement](https://developers.eveonline.com/license-agreement).
-Should the license of these software packages and the EVE Online developer license agreement conflict the EVE Online developer license agreement takes precedence.
-
-© 2014 CCP hf. All rights reserved. "EVE", "EVE Online", "CCP", and all related logos and images are trademarks or registered trademarks of CCP hf.
