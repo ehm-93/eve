@@ -7,12 +7,9 @@
 import 'zx/globals';
 
 import path from 'node:path';
-import url from 'node:url';
 import { exit } from 'node:process';
 
-
-const hackDir = url.fileURLToPath(new URL('.', import.meta.url));
-const workspaceDir = path.join(hackDir, '..');
+import { hackDir, workspaceDir } from './common.mjs';
 
 const tsconfig = {
   extends: '../../tsconfig.base.json',
