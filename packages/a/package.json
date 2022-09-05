@@ -1,7 +1,0 @@
-{
-    "name": "@emmettsdomain/eve-a",
-    "devDependencies": {
-        "@types/node": "18"
-    },
-    "main": "dist"
-}

@@ -1,0 +1,7 @@
+{
+  "name": "@emmettsdomain/eve-marketer-client",
+  "main": "dist",
+  "devDependencies": {
+    "@types/node": "18"
+  }
+}

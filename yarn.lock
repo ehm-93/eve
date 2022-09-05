@@ -5,17 +5,9 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@emmettsdomain/eve-a@workspace:packages/a":
+"@emmettsdomain/eve-marketer-client@workspace:packages/marketer-client":
   version: 0.0.0-use.local
-  resolution: "@emmettsdomain/eve-a@workspace:packages/a"
-  dependencies:
-    "@types/node": 18
-  languageName: unknown
-  linkType: soft
-
-"@emmettsdomain/eve-b@workspace:packages/b":
-  version: 0.0.0-use.local
-  resolution: "@emmettsdomain/eve-b@workspace:packages/b"
+  resolution: "@emmettsdomain/eve-marketer-client@workspace:packages/marketer-client"
   dependencies:
     "@types/node": 18
   languageName: unknown
