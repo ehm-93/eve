@@ -24,9 +24,6 @@ export class FileLoader<T> {
   private async doLoad(): Promise<T> {
     const buf = await readFile(this.path);
     const str = buf.toString();
-    const data = YAML.load(str) as any;
-    if (Array.isArray(data)) return Promise.resolve(data as any);
-    else if (typeof data === 'object') return Promise.resolve(Object.values(data) as any);
-    else throw new Error(`Unsupported dataset type: ${ typeof data }`);
+    return Promise.resolve(YAML.load(str) as any);
   }
 }

@@ -4,11 +4,11 @@ import { Loader } from './loader';
 export class Dataset<T> {
   private initialized = false;
 
-  private dataset: T[] = [];
+  private dataset: { [ key: number ]: T } = [];
   private _indexes: { [ key: string ]: Indexer<T> } = {};
 
   constructor(
-    private readonly loader: Loader<T[]>,
+    private readonly loader: Loader<{ [ key: number ]: T }>,
     private readonly indexOn: string[],
   ) { }
 
@@ -35,7 +35,11 @@ export class Dataset<T> {
   }
 
   length(): number {
-    return this.dataset.length;
+    if (Array.isArray(this.dataset)) {
+      return this.dataset.length;
+    } else {
+      return Object.entries(this.dataset).length;
+    }
   }
 
   index(index: string): Indexer<T> {

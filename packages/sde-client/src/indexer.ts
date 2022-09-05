@@ -4,7 +4,7 @@ const NULL = 'null_ece1b6bf-b23b-4612-bd75-171ce31f4842';
 const UNDEFINED = 'undefined_b04b5411-fc8b-40bc-adfc-781ece03819b';
 
 export namespace Indexer {
-  export function create<T>(dataset: Iterable<T>, indexOn: string): Indexer<T> {
+  export function create<T>(dataset: { [ key: number ]: T }, indexOn: string): Indexer<T> {
     return new ReadonlyInMemoryIndexer(dataset, indexOn);
   }
 }
@@ -58,13 +58,21 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer<T> {
   private indexes: { [ key: string ]: T[] } = { };
 
   constructor(
-    private readonly dataset: Iterable<T>,
+    private readonly dataset: { [ key: number ]: T },
     private readonly indexOn: string,
   ) { }
 
   init(): Promise<void> {
     this.indexes = {};
-    for (const el of this.dataset) {
+
+    let iterable: Iterable<T>;
+    if (Array.isArray(this.dataset)) {
+      iterable = this.dataset;
+    } else {
+      iterable = Object.values(this.dataset);
+    }
+
+    for (const el of iterable) {
       const value = this.encodeValue(pointer.get(el as any, this.indexOn));
       if (!this.indexes[value]) {
         this.indexes[value] = [];
