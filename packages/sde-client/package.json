@@ -3,5 +3,9 @@
   "main": "dist",
   "devDependencies": {
     "@types/node": "^18.0.0"
+  },
+  "dependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "js-yaml": "^4.1.0"
   }
 }

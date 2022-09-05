@@ -19,7 +19,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@emmettsdomain/eve-sde-client@workspace:packages/sde-client"
   dependencies:
+    "@types/js-yaml": ^4.0.5
     "@types/node": ^18.0.0
+    js-yaml: ^4.1.0
   languageName: unknown
   linkType: soft
 
@@ -32,6 +34,7 @@ __metadata:
     eslint: ^8.23.0
     eslint-plugin-import: ^2.26.0
     eslint-plugin-prefer-arrow: ^1.2.3
+    js-yaml: ^4.1.0
     typescript: ^4.8.2
     zx: ^7.0.8
   languageName: unknown
@@ -119,6 +122,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: add79e212acd5ac76b97b9045834e03a7996aef60a814185e0459088fd290519a3c1620865d588fa36c4498bf614210d2a703af5cf80aa1dbc125db78f6edac3
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "@types/js-yaml@npm:4.0.5"
+  checksum: 7dcac8c50fec31643cc9d6444b5503239a861414cdfaa7ae9a38bc22597c4d850c4b8cec3d82d73b3fbca408348ce223b0408d598b32e094470dfffc6d486b4d
   languageName: node
   linkType: hard
 
