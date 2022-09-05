@@ -3,6 +3,9 @@
   "references": [
     {
       "path": "packages/marketer-client"
+    },
+    {
+      "path": "packages/sde-client"
     }
   ]
 }

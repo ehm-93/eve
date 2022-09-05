@@ -1,0 +1,7 @@
+{
+  "name": "@emmettsdomain/eve-sde-client",
+  "main": "dist",
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  }
+}

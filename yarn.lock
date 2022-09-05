@@ -15,6 +15,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@emmettsdomain/eve-sde-client@workspace:packages/sde-client":
+  version: 0.0.0-use.local
+  resolution: "@emmettsdomain/eve-sde-client@workspace:packages/sde-client"
+  dependencies:
+    "@types/node": ^18.0.0
+  languageName: unknown
+  linkType: soft
+
 "@emmettsdomain/eve@workspace:.":
   version: 0.0.0-use.local
   resolution: "@emmettsdomain/eve@workspace:."
