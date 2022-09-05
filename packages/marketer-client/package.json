@@ -2,6 +2,10 @@
   "name": "@emmettsdomain/eve-marketer-client",
   "main": "dist",
   "devDependencies": {
-    "@types/node": "18"
+    "@types/node": "^18.0.0",
+    "@types/node-fetch": "^2.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.0.0"
   }
 }

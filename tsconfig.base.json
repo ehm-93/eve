@@ -1,22 +1,23 @@
 {
-    "compilerOptions": {
-      "lib": [
-        "ESNext"
-      ],
-      "removeComments": false,
-      "target": "ES6",
-      "esModuleInterop": true,
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "alwaysStrict": true,
-      "allowUnreachableCode": false,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "noImplicitReturns": true,
-      "noImplicitOverride": true,
-      "noUncheckedIndexedAccess": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "composite": true
-    },
-  }
+  "compilerOptions": {
+    "lib": [
+      "ES2022"
+    ],
+    "module": "umd",
+    "target": "ES2022",
+    "removeComments": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "composite": true
+  },
+}

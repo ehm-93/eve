@@ -35,7 +35,7 @@ const packageJson = {
   name: `@emmettsdomain/eve-${ name }`,
   main: 'dist',
   devDependencies: {
-    '@types/node': '18',
+    '@types/node': '^18.0.0',
   },
 };
 
