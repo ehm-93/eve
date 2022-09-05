@@ -9,7 +9,7 @@ export class Dataset<T> {
 
   constructor(
     private readonly loader: Loader<T[]>,
-    private readonly indexOn: (keyof T)[],
+    private readonly indexOn: string[],
   ) { }
 
   async init(): Promise<void> {
@@ -38,7 +38,7 @@ export class Dataset<T> {
     return this.dataset.length;
   }
 
-  index(index: keyof T): Indexer<T> {
+  index(index: string): Indexer<T> {
     this.checkInitialized();
 
     const tmp = this._indexes[String(index)];

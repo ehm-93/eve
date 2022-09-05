@@ -1,8 +1,10 @@
+import pointer from 'jsonpointer';
+
 const NULL = 'null_ece1b6bf-b23b-4612-bd75-171ce31f4842';
 const UNDEFINED = 'undefined_b04b5411-fc8b-40bc-adfc-781ece03819b';
 
 export namespace Indexer {
-  export function create<T>(dataset: Iterable<T>, indexOn: keyof T): Indexer<T> {
+  export function create<T>(dataset: Iterable<T>, indexOn: string): Indexer<T> {
     return new ReadonlyInMemoryIndexer(dataset, indexOn);
   }
 }
@@ -38,10 +40,10 @@ export interface Indexer<T> {
  *   name: 'Bill',
  * }]
  *
- * const byId = new Indexer(dataset, 'id');
+ * const byId = new Indexer(dataset, '/id');
  * byId.init();
  *
- * const byName = new Indexer(dataset, 'name');
+ * const byName = new Indexer(dataset, '/name');
  * byName.init();
  *
  * byId.findOne('abc');    // returns the first Bill
@@ -57,13 +59,13 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer<T> {
 
   constructor(
     private readonly dataset: Iterable<T>,
-    private readonly indexOn: keyof T,
+    private readonly indexOn: string,
   ) { }
 
   init(): Promise<void> {
     this.indexes = {};
     for (const el of this.dataset) {
-      const value = this.encodeValue(el[this.indexOn]);
+      const value = this.encodeValue(pointer.get(el as any, this.indexOn));
       if (!this.indexes[value]) {
         this.indexes[value] = [];
       }
@@ -75,7 +77,7 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer<T> {
   }
 
   find(value: unknown): Promise<T[]> {
-    return Promise.resolve(this.indexes[this.encodeValue(value)] ?? []);
+    return Promise.resolve([...(this.indexes[this.encodeValue(value)] ?? [])]);
   }
 
   async findOne(value: unknown): Promise<T> {

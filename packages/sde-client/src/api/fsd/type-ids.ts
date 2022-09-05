@@ -1,31 +1,34 @@
 import { Dataset } from '../../dataset';
 import { FileLoader } from '../../loader';
-
-export interface I18n {
-  de: string;
-  en: string;
-  fr: string;
-  ja: string;
-  ru: string;
-  zh: string;
-}
+import { I18n } from '../../types';
 
 export interface Type {
-  basePrice: number;
-  capacity: number;
-  description: I18n;
-  factionID: number;
-  graphicID: number;
+  basePrice?: number;
+  capacity?: number;
+  description?: I18n;
+  factionID?: number;
+  graphicID?: number;
   groupID: number;
+  iconID?: number;
   mass: number;
+  marketGroupID?: number;
+  masteries?: { [ key: number ]: number[] }
   name: I18n;
   portionSize: number;
   published: boolean;
-  raceID: number;
-  radius: number;
-  sofFactionName: string;
-  soundID: number;
-  volume: number;
+  raceID?: number;
+  radius?: number;
+  sofFactionName?: string;
+  soundID?: number;
+  traits?: { types: { [ key: number ]: TraitType[] } };
+  volume?: number;
+}
+
+export interface TraitType {
+  bonus: number;
+  bonusText: I18n;
+  importance: number;
+  unitId: number;
 }
 
 export interface TypeApiOptions {
@@ -41,7 +44,15 @@ export class TypeApi {
   ) {
     this.dataset = new Dataset(
       new FileLoader(options.path),
-      [ 'groupID' ],
+      [
+        '/groupID',
+        '/name/de',
+        '/name/en',
+        '/name/fr',
+        '/name/ja',
+        '/name/ru',
+        '/name/zh',
+      ],
     );
   }
 
@@ -54,7 +65,13 @@ export class TypeApi {
   async findByGroupId(groupId: number): Promise<Type[]> {
     await this.checkInit();
 
-    return this.dataset.index('groupID').find(groupId);
+    return this.dataset.index('/groupID').find(groupId);
+  }
+
+  async findByName(lang: keyof I18n, value: string): Promise<Type[]> {
+    await this.checkInit();
+
+    return this.dataset.index(`/name/${ lang }`).find(value);
   }
 
   private checkInit(): Promise<void> {
