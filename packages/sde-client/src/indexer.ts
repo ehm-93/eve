@@ -4,15 +4,15 @@ const NULL = 'null_ece1b6bf-b23b-4612-bd75-171ce31f4842';
 const UNDEFINED = 'undefined_b04b5411-fc8b-40bc-adfc-781ece03819b';
 
 export namespace Indexer {
-  export function create<T>(dataset: { [ key: number ]: T }, indexOn: string): Indexer<T> {
+  export function create(dataset: { [ key: number ]: unknown }, indexOn: string): Indexer {
     return new ReadonlyInMemoryIndexer(dataset, indexOn);
   }
 }
 
-export interface Indexer<T> {
+export interface Indexer {
   init(): Promise<void>;
-  find(value: unknown): Promise<T[]>;
-  findOne(value: unknown): Promise<T>;
+  find(value: unknown): Promise<number[]>;
+  findOne(value: unknown): Promise<number>;
 }
 
 /**
@@ -54,41 +54,31 @@ export interface Indexer<T> {
  *                         // there is not exactly 1 Bill
  * ```
  */
-export class ReadonlyInMemoryIndexer<T> implements Indexer<T> {
-  private indexes: { [ key: string ]: T[] } = { };
+export class ReadonlyInMemoryIndexer implements Indexer {
+  private indexes: { [ key: string ]: number[] } = { };
 
   constructor(
-    private readonly dataset: { [ key: number ]: T },
+    private readonly dataset: { [ key: number ]: unknown },
     private readonly indexOn: string,
   ) { }
 
   init(): Promise<void> {
     this.indexes = {};
 
-    let iterable: Iterable<T>;
     if (Array.isArray(this.dataset)) {
-      iterable = this.dataset;
+      this.initArray(this.dataset);
     } else {
-      iterable = Object.values(this.dataset);
+      this.initObject(this.dataset);
     }
 
-    for (const el of iterable) {
-      const value = this.encodeValue(pointer.get(el as any, this.indexOn));
-      if (!this.indexes[value]) {
-        this.indexes[value] = [];
-      }
-      // Cannot be null
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.indexes[value]!.push(el);
-    }
     return Promise.resolve();
   }
 
-  find(value: unknown): Promise<T[]> {
+  find(value: unknown): Promise<number[]> {
     return Promise.resolve([...(this.indexes[this.encodeValue(value)] ?? [])]);
   }
 
-  async findOne(value: unknown): Promise<T> {
+  async findOne(value: unknown): Promise<number> {
     const result = await this.find(value);
     if (result.length !== 1) {
       return Promise.reject(new Error(`Found ${ result.length } elements when exactly 1 was expected.`));
@@ -96,6 +86,32 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer<T> {
     // It can't be null here
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return Promise.resolve(result[0]!);
+  }
+
+  private initArray(dataset: unknown[]): void {
+    dataset.forEach((el, i) => {
+      const value = this.encodeValue(pointer.get(el as any, this.indexOn));
+      if (!this.indexes[value]) {
+        this.indexes[value] = [];
+      }
+      // Cannot be null
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.indexes[value]!.push(i);
+    });
+  }
+
+  private initObject(dataset: { [ key: number ]: unknown }): void {
+    Object.entries(dataset).forEach(([i, el]) => this.appendToIndex(el, Number(i)));
+  }
+
+  private appendToIndex(el: unknown, i: number): void {
+    const value = this.encodeValue(pointer.get(el as any, this.indexOn));
+    if (!this.indexes[value]) {
+      this.indexes[value] = [];
+    }
+    // Cannot be null
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.indexes[value]!.push(i);
   }
 
   private encodeValue(value: unknown): string {

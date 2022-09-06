@@ -1,11 +1,16 @@
 import { Indexer } from './indexer';
 import { Loader } from './loader';
 
+export interface ValueIndexer<T> {
+  find(value: unknown): Promise<T[]>,
+  findOne(value: unknown): Promise<T>,
+}
+
 export class Dataset<T> {
   private initialized = false;
 
   private dataset: { [ key: number ]: T } = [];
-  private _indexes: { [ key: string ]: Indexer<T> } = {};
+  private _indexes: { [ key: string ]: Indexer } = {};
 
   constructor(
     private readonly loader: Loader<{ [ key: number ]: T }>,
@@ -42,12 +47,17 @@ export class Dataset<T> {
     }
   }
 
-  index(index: string): Indexer<T> {
+  index(index: string): ValueIndexer<T> {
     this.checkInitialized();
 
     const tmp = this._indexes[String(index)];
     if (!tmp) throw new Error(`No such index ${ String(index) }`);
-    return tmp;
+    return {
+      find: async (value: unknown) =>
+        Promise.all((await tmp.find(value)).map(it => this.get(it))),
+      findOne: async (value: unknown) => 
+        this.get(await tmp.findOne(value)),
+    };
   }
 
   indexes(): string[] {
