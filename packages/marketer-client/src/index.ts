@@ -7,7 +7,7 @@ export interface MarketStats {
 
 export interface Stats {
   max: number,
-  media: number,
+  median: number,
   generated: number,
   variance: number,
   min: number,
