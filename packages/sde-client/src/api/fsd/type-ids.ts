@@ -10,6 +10,7 @@ export interface Type {
   graphicID?: number;
   groupID: number;
   iconID?: number;
+  id: number;
   mass: number;
   marketGroupID?: number;
   masteries?: { [ key: number ]: number[] }
@@ -36,7 +37,7 @@ export interface TypeApiOptions {
 }
 
 export class TypeApi {
-  private readonly dataset: Dataset<Type>;
+  private readonly dataset: Dataset<Omit<Type, 'id'>>;
   private init: Promise<void>;
 
   constructor(
@@ -59,19 +60,22 @@ export class TypeApi {
   async findById(id: number): Promise<Type> {
     await this.checkInit();
 
-    return this.dataset.get(id);
+    const tmp = this.dataset.get(id);
+    return { id: tmp.index, ...tmp.value };
   }
 
   async findByGroupId(groupId: number): Promise<Type[]> {
     await this.checkInit();
 
-    return this.dataset.index('/groupID').find(groupId);
+    return (await this.dataset.index('/groupID').find(groupId))
+      .map(it => ({ id: it.index, ...it.value }));
   }
 
   async findByName(lang: keyof I18n, value: string): Promise<Type[]> {
     await this.checkInit();
 
-    return this.dataset.index(`/name/${ lang }`).find(value);
+    return (await this.dataset.index(`/name/${ lang }`).find(value))
+      .map(it => ({ id: it.index, ...it.value }));
   }
 
   private checkInit(): Promise<void> {

@@ -1,6 +1,11 @@
 import { Indexer } from './indexer';
 import { Loader } from './loader';
 
+export interface Indexed<T> {
+  index: number;
+  value: T;
+}
+
 export interface ValueIndexer<T> {
   find(value: unknown): Promise<T[]>,
   findOne(value: unknown): Promise<T>,
@@ -33,10 +38,10 @@ export class Dataset<T> {
     this.initialized = true;
   }
 
-  get(i: number): T {
+  get(i: number): Indexed<T> {
     const tmp = this.dataset[i];
     if (!tmp) throw new Error(`Index ${ i } is out of bounds.`);
-    return tmp;
+    return { index: i, value: tmp };
   }
 
   length(): number {
@@ -47,7 +52,7 @@ export class Dataset<T> {
     }
   }
 
-  index(index: string): ValueIndexer<T> {
+  index(index: string): ValueIndexer<Indexed<T>> {
     this.checkInitialized();
 
     const tmp = this._indexes[String(index)];
@@ -55,7 +60,7 @@ export class Dataset<T> {
     return {
       find: async (value: unknown) =>
         Promise.all((await tmp.find(value)).map(it => this.get(it))),
-      findOne: async (value: unknown) => 
+      findOne: async (value: unknown) =>
         this.get(await tmp.findOne(value)),
     };
   }
