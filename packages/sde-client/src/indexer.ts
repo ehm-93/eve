@@ -1,11 +1,12 @@
-import pointer from 'jsonpointer';
+export type IndexValue = boolean | string | number | null | undefined;
+export type IndexValueExtractor<T> = (data: T) => IndexValue | IndexValue[];
 
 const NULL = 'null_ece1b6bf-b23b-4612-bd75-171ce31f4842';
 const UNDEFINED = 'undefined_b04b5411-fc8b-40bc-adfc-781ece03819b';
 
 export namespace Indexer {
-  export function create(dataset: { [ key: number ]: unknown }, indexOn: string): Indexer {
-    return new ReadonlyInMemoryIndexer(dataset, indexOn);
+  export function create<T>(dataset: { [ key: number ]: T }, extractor: IndexValueExtractor<T>): Indexer {
+    return new ReadonlyInMemoryIndexer(dataset, extractor);
   }
 }
 
@@ -40,10 +41,10 @@ export interface Indexer {
  *   name: 'Bill',
  * }]
  *
- * const byId = new Indexer(dataset, '/id');
+ * const byId = new Indexer(dataset, el => el.id);
  * byId.init();
  *
- * const byName = new Indexer(dataset, '/name');
+ * const byName = new Indexer(dataset, el => el.name);
  * byName.init();
  *
  * byId.findOne('abc');    // returns the first Bill
@@ -54,12 +55,12 @@ export interface Indexer {
  *                         // there is not exactly 1 Bill
  * ```
  */
-export class ReadonlyInMemoryIndexer implements Indexer {
+export class ReadonlyInMemoryIndexer<T> implements Indexer {
   private indexes: { [ key: string ]: number[] } = { };
 
   constructor(
-    private readonly dataset: { [ key: number ]: unknown },
-    private readonly indexOn: string,
+    private readonly dataset: { [ key: number ]: T },
+    private readonly extractor: IndexValueExtractor<T>,
   ) { }
 
   init(): Promise<void> {
@@ -88,24 +89,16 @@ export class ReadonlyInMemoryIndexer implements Indexer {
     return Promise.resolve(result[0]!);
   }
 
-  private initArray(dataset: unknown[]): void {
-    dataset.forEach((el, i) => {
-      const value = this.encodeValue(pointer.get(el as any, this.indexOn));
-      if (!this.indexes[value]) {
-        this.indexes[value] = [];
-      }
-      // Cannot be null
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.indexes[value]!.push(i);
-    });
+  private initArray(dataset: T[]): void {
+    dataset.forEach((el, i) => this.appendToIndex(el, i));
   }
 
-  private initObject(dataset: { [ key: number ]: unknown }): void {
+  private initObject(dataset: { [ key: number ]: T }): void {
     Object.entries(dataset).forEach(([i, el]) => this.appendToIndex(el, Number(i)));
   }
 
-  private appendToIndex(el: unknown, i: number): void {
-    const value = this.encodeValue(pointer.get(el as any, this.indexOn));
+  private appendToIndex(el: T, i: number): void {
+    const value = this.encodeValue(this.extractor(el));
     if (!this.indexes[value]) {
       this.indexes[value] = [];
     }
@@ -123,7 +116,8 @@ export class ReadonlyInMemoryIndexer implements Indexer {
     } else if (value === undefined) {
       return UNDEFINED;
     } else if (Array.isArray(value) || typeof value === 'object') {
-      throw new Error(`Found object or array while indexing by '${ String(this.indexOn) }'. Indexes can only be created on primitive types.`);
+      throw new Error('Found object or array while indexing. Indexes can only be created on primitive types or their arrays.');
+
     } else {
       return value.toString();
     }

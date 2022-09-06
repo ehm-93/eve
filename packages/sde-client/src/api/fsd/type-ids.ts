@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { Dataset } from '../../dataset';
 import { FileLoader } from '../../loader';
 import { I18n } from '../../types';
@@ -45,15 +47,15 @@ export class TypeApi {
   ) {
     this.dataset = new Dataset(
       new FileLoader(options.path),
-      [
-        '/groupID',
-        '/name/de',
-        '/name/en',
-        '/name/fr',
-        '/name/ja',
-        '/name/ru',
-        '/name/zh',
-      ],
+      {
+        groupID: el => el.groupID,
+        name_de: el => el.name.de,
+        name_en: el => el.name.en,
+        name_fr: el => el.name.fr,
+        name_ja: el => el.name.ja,
+        name_ru: el => el.name.ru,
+        name_zh: el => el.name.zh,
+      }
     );
   }
 
@@ -67,14 +69,14 @@ export class TypeApi {
   async findByGroupId(groupId: number): Promise<Type[]> {
     await this.checkInit();
 
-    return (await this.dataset.index('/groupID').find(groupId))
+    return (await this.dataset.index('groupID').find(groupId))
       .map(it => ({ id: it.index, ...it.value }));
   }
 
   async findByName(lang: keyof I18n, value: string): Promise<Type[]> {
     await this.checkInit();
 
-    return (await this.dataset.index(`/name/${ lang }`).find(value))
+    return (await this.dataset.index(`name_${ lang }`).find(value))
       .map(it => ({ id: it.index, ...it.value }));
   }
 

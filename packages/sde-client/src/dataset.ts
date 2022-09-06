@@ -1,4 +1,4 @@
-import { Indexer } from './indexer';
+import { Indexer, IndexValueExtractor } from './indexer';
 import { Loader } from './loader';
 
 export interface Indexed<T> {
@@ -19,20 +19,22 @@ export class Dataset<T> {
 
   constructor(
     private readonly loader: Loader<{ [ key: number ]: T }>,
-    private readonly indexOn: string[],
+    private readonly indexExtractors: { [ name: string ]: IndexValueExtractor<T>  }
   ) { }
 
   async init(): Promise<void> {
     this.initialized = false;
 
     this.dataset = await this.loader.load();
-    this._indexes = {};
+    this._indexes = { };
 
     await Promise.all(
-      this.indexOn.flatMap(index => {
-        this._indexes[String(index)] = Indexer.create(this.dataset, index);
-        return Object.values(this._indexes).map(i => i.init());
-      })
+      Object.entries(this.indexExtractors)
+        .map(([name, extractor]) => {
+          const idx = Indexer.create(this.dataset, extractor);
+          this._indexes[name] = idx;
+          return idx.init();
+        })
     );
 
     this.initialized = true;

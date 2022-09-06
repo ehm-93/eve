@@ -44,9 +44,9 @@ export class BlueprintApi {
   ) {
     this.dataset = new Dataset(
       new FileLoader(options.path),
-      [
-        '/blueprintTypeID',
-      ],
+      {
+        blueprintTypeId: el => el.blueprintTypeID,
+      },
     );
   }
 
@@ -60,7 +60,7 @@ export class BlueprintApi {
   async findByBlueprintTypeId(typeId: number): Promise<Blueprint> {
     await this.checkInit();
 
-    const tmp = await this.dataset.index('/blueprintTypeID').findOne(typeId);
+    const tmp = await this.dataset.index('blueprintTypeId').findOne(typeId);
     return { id: tmp.index, ...tmp.value };
   }
 

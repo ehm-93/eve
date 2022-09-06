@@ -6,8 +6,6 @@
   },
   "dependencies": {
     "@types/js-yaml": "^4.0.5",
-    "@types/jsonpointer": "^4.0.0",
-    "js-yaml": "^4.1.0",
-    "jsonpointer": "^5.0.1"
+    "js-yaml": "^4.1.0"
   }
 }
