@@ -98,13 +98,29 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer {
   }
 
   private appendToIndex(el: T, i: number): void {
-    const value = this.encodeValue(this.extractor(el));
+    const value = this.encodeValueOrArray(this.extractor(el));
+    if (Array.isArray(value)) {
+      value.forEach(it => this.appendValueToIndex(it, i));
+    } else {
+      this.appendValueToIndex(value, i);
+    }
+  }
+
+  private appendValueToIndex(value: string, i: number): void {
     if (!this.indexes[value]) {
       this.indexes[value] = [];
     }
     // Cannot be null
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.indexes[value]!.push(i);
+  }
+
+  private encodeValueOrArray(value: unknown): string[] | string {
+    if (Array.isArray(value)) {
+      return value.map(el => this.encodeValue(el));
+    } else {
+      return this.encodeValue(value);
+    }
   }
 
   private encodeValue(value: unknown): string {
@@ -117,7 +133,6 @@ export class ReadonlyInMemoryIndexer<T> implements Indexer {
       return UNDEFINED;
     } else if (Array.isArray(value) || typeof value === 'object') {
       throw new Error('Found object or array while indexing. Indexes can only be created on primitive types or their arrays.');
-
     } else {
       return value.toString();
     }
