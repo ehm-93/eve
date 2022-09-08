@@ -1,9 +1,9 @@
-const fs = require('node:fs/promises');
+import * as fs from 'node:fs/promises';
 
-const { BlueprintApi, TypeApi } = require('@emmettsdomain/eve-sde-client');
+import { BlueprintApi, TypeApi } from '@emmettsdomain/eve-sde-client';
 
 
-const types = new TypeApi({ path: '/workspace/eve/data/sde/fsd/typeIDs.yaml' })
+const types = new TypeApi({ path: '/workspace/eve/data/sde/fsd/typeIDs.yaml' });
 const blueprints = new BlueprintApi({ path: '/workspace/eve/data/sde/fsd/blueprints.yaml' });
 
 async function main() {
@@ -20,13 +20,14 @@ async function main() {
   await fs.writeFile('erebus.json', JSON.stringify(tree, null, 2));
 }
 
-async function recipeTree(typeId) {
+async function recipeTree(typeId: number) {
   let [ bp ] = await blueprints.findByActivity(typeId, 'manufacturing', 'product');
   if (!bp) [ bp ] = await blueprints.findByActivity(typeId, 'reaction', 'product');
   if (!(bp?.activities.manufacturing?.materials || bp?.activities.reaction?.materials)) return []
 
-  const result = [];
-  const materials = bp.activities.manufacturing?.materials || bp.activities.reaction?.materials;
+  type Result = { typeId: number, name: string, quantity: number, basePrice?: number, materials: Result[] };
+  const result: Result[] = [];
+  const materials = bp.activities.manufacturing?.materials || bp.activities.reaction?.materials || [];
   for (const mat of materials) {
     const type = await types.findById(mat.typeID);
     result.push({

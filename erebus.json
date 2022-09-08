@@ -1,6 +1,7 @@
 {
   "typeId": 671,
   "name": "Erebus",
+  "quantity": 1,
   "basePrice": 178800000000,
   "materials": [
     {
