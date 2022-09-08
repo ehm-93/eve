@@ -19,7 +19,7 @@ export class Dataset<T> {
 
   constructor(
     private readonly loader: Loader<{ [ key: number ]: T }>,
-    private readonly indexExtractors: { [ name: string ]: IndexValueExtractor<T>  }
+    private readonly indexExtractors: { [ name: string ]: IndexValueExtractor<T> },
   ) { }
 
   async init(): Promise<void> {
