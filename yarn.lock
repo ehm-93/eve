@@ -34,6 +34,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@emmettsdomain/eve-services@workspace:packages/services":
+  version: 0.0.0-use.local
+  resolution: "@emmettsdomain/eve-services@workspace:packages/services"
+  dependencies:
+    "@types/node": ^18.0.0
+  languageName: unknown
+  linkType: soft
+
 "@emmettsdomain/eve@workspace:.":
   version: 0.0.0-use.local
   resolution: "@emmettsdomain/eve@workspace:."

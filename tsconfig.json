@@ -6,6 +6,9 @@
     },
     {
       "path": "packages/sde-client"
+    },
+    {
+      "path": "packages/services"
     }
   ]
 }
