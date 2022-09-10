@@ -14,6 +14,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emmettsdomain/eve-esi-client@workspace:packages/esi-client":
+  version: 0.0.0-use.local
+  resolution: "@emmettsdomain/eve-esi-client@workspace:packages/esi-client"
+  dependencies:
+    "@types/node": ^18.0.0
+  languageName: unknown
+  linkType: soft
+
 "@emmettsdomain/eve-marketer-client@workspace:packages/marketer-client":
   version: 0.0.0-use.local
   resolution: "@emmettsdomain/eve-marketer-client@workspace:packages/marketer-client"

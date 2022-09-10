@@ -9,6 +9,9 @@
     },
     {
       "path": "packages/services"
+    },
+    {
+      "path": "packages/esi-client"
     }
   ]
 }
