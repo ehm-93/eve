@@ -1,5 +1,7 @@
 image:
   file: dev.docker
+tasks:
+- init: './hack/setup-workspace.mjs'
 vscode:
   extensions:
   - streetsidesoftware.code-spell-checker
