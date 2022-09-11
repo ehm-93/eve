@@ -62,7 +62,7 @@ if (etagFileExists && etagFileStat.isFile()) {
 
 
 const headers = {};
-if (etag) headers['if-none-match'] = etag;
+if (etag) headers['if-none-match'] = etag.toString();
 
 const sdeResponse = await fetch('https://eve-static-data-export.s3-eu-west-1.amazonaws.com/tranquility/sde.zip', { headers });
 

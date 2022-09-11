@@ -36,10 +36,14 @@ try {
   // Install httpie
   // https://httpie.io/
   //
-  await $`curl -sSfl https://packages.httpie.io/binaries/linux/http-latest > ${ tempDir }/http`
-  await $`chmod 744 ${ tempDir }/http`
-  await $`sudo mv ${ tempDir }/http /usr/bin/http`
+  await $`curl -sSfl https://packages.httpie.io/binaries/linux/http-latest > ${ tempDir }/http`;
+  await $`chmod 744 ${ tempDir }/http`;
+  await $`sudo mv ${ tempDir }/http /usr/bin/http`;
 
+  //
+  // Download an SDE
+  //
+  await import('./refresh-sde.mjs');
 } finally {
   await $`rm -rf ${ tempDir }`;
 }
