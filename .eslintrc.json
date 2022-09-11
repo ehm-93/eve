@@ -9,6 +9,10 @@
         "import",
         "@typescript-eslint"
     ],
+    "ignorePatterns": [
+      "**/node_modules/**/*",
+      "**/dist/**/*"
+    ],
     "overrides": [{
         "files": [ "*.ts" ],
         "parserOptions": {

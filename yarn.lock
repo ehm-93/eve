@@ -19,6 +19,7 @@ __metadata:
   resolution: "@emmettsdomain/eve-esi-client@workspace:packages/esi-client"
   dependencies:
     "@types/node": ^18.0.0
+    node-fetch: ^2.0.0
   languageName: unknown
   linkType: soft
 
