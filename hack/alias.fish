@@ -7,7 +7,7 @@
 #   source ./hack/alias.sh
 #
 
-alias openapi-generator-cli='docker run -v "$( pwd ):/local" openapitools/openapi-generator-cli:latest-release'
+alias openapi-generator-cli='docker run  -v ( pwd )":/local" openapitools/openapi-generator-cli:latest-release'
 
 alias build='yarn run build'
 alias clean='yarn run clean'
